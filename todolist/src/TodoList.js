@@ -43,9 +43,12 @@ class TodoList extends Component {
 
   componentDidMount() {
     axios
-      .get("/api/todo")
-      .then(() => {
+      .get("/api/todolist")
+      .then(res => {
         alert("succ");
+        this.setState(() => {
+          return { list: res.data };
+        });
       })
       .catch(() => {
         alert("error");
@@ -58,7 +61,6 @@ class TodoList extends Component {
           {/* 
             需要一个unique key来区分每一次map出来的结果，加在最外层的wrapper。
             使用index作为key并不是理想选择，可能造成错误。
-
           */}
           <TodoItem
             content={item}

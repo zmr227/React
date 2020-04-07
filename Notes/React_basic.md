@@ -30,7 +30,9 @@ App 组件（Components）
 
 - 大写字母开头的元素叫组件，小写字母开头则是普通元素。
 - 创建实例/使用组件时，constructor()会自动优先执行。
-- 一个组件的 render()返回的内容必须有一个 wrapper 元素包裹，如<div><Fragment>
+- 一个组件的 render()返回的内容必须有一个 wrapper 元素包裹，
+  - 如<div><React.Fragment>
+  - Fragment 是占位符，只用于包裹，不会被渲染成任何标签/元素。
 
 State
 
@@ -167,3 +169,77 @@ Ref 的使用
     <img src="imgs/生命周期函数.png">
 - 除了 render 之外所有的生命周期函数都可以不存在
 - render 函数执行条件：组件的 state 或 props 发生变化 / 父组件 render 函数执行时，子组件的 render 也会执行（性能损耗）=> 使用 shouldComponentUpdate(nextProps, nextState) 函数进行优化
+
+Charles 接口数据模拟
+
+- 模拟后端 api 抓取 json 文件中的数据，通过 map local 返回。
+- 无法抓取 localhost，需要在 package.json 中修改`"start": "PORT=3000 HOST=localhost.charlesproxy.com react-scripts start"`
+
+动画效果
+
+- @keyframes 简单的动画效果（class 增减）
+- CSSTransition 专用动画模块，自动增减样式完成动画效果：
+  - 入场动画执行的第一个瞬间：给标签挂载 className-enter 标签
+  - 入场动画执行的第二个瞬间 -- 入场动画完成：className-enter-active
+  - 入场动画执行完成之后：className-enter-done
+  - 出场动画：className-exit，className-enter-active，className-enter-done
+  - 提供钩子函数，可以实现更多的复杂 JS 动画效果（unmountOnExit，onEntered 等函数可以在某个时刻自动执行）
+  - http://reactcommunity.org/react-transition-group/css-transition
+- transition 更底层的实现，若 CSSTransition 无法实现，可以查看 transition API
+
+## Chapter 3. Redux
+
+Redux 概述
+
+- Redux = Reducer + Flux
+- 组件中尽量少的存储数据，数据都存放在一个公共的 Store 中，只要 Store 中的数据更新，其他组件感知到数据变化，就会取出新的数据来更新，便于数据在组件中传递。
+
+知识要点
+
+- store 必须是唯一的
+- 只有 store 能改变自己的内容，因此 reducer 不能改变 state 数据（即 store 内容）。
+- Reducer 必须是纯函数
+  - 纯函数：给定输入，就一定有固定的输出，且没有任何副作用）
+  - 副作用：修改了输入的内容。
+  - 非纯函数：setTimeout，Date，Ajax 请求等操作都会导致输出不固定，修改 Input 则会产生副作用。
+
+Redux 工作流程
+
+<img src="imgs/Redux flow.png" width="80%">
+
+- React Component: 要获取/修改数据的组件
+- Action Creator: 表达自己需要获取/修改什么数据
+- Reducer: 告知 Store 应当给组件什么数据/如何修改(state 是 store 中当前存储的数据, action 需要进行的操作)
+- Store: 管理员，查阅 reducer 并将数据传递给组件
+
+* store.dispatch() 方法可以将 action 传给 store, store 会将当前数据 state 和接收到的 action 一起自动转发给 reducer。
+* Reducer 可以接受 state，但是绝不能修改 state，必须做一次 deep copy，改变新的 new state 中的数据，将 new state 返回，store 拿到 new state 之后再用其中的数据更新 state。
+
+UI 组件 & 容器组件的拆分
+
+- UI 组件负责页面渲染
+- 容器组件负责页面逻辑
+
+无状态组件
+
+- 当组件中只有一个 render 函数时，就可以用无状态组件来替换普通组件，如 UI 组件。（只有渲染没有逻辑）
+- 性能更高（无状态组件只是一个函数，而普通组件还有其他生命周期函数需要执行，因此无状态组件性能更优）
+
+Redux 的中间件 Middleware
+
+- 中间件：在 Action 和 store 之间，对 dispatch 的升级。
+- dispatch：根据参数的不同做不同的操作。
+  - 如果接收到一个对象 --> 直接发给 store
+  - 如果接收到一个函数 --> 执行函数，由函数决定是否调用 store
+- 工作流程：View 派发一个 Action，由 Store.dispatch() 派发给 store，之后 store 将其现有的 state 和 action 一起打包发给 reducer，reducer 根据 action 操作后返回一个新的 state 给 store，store 根据收到的新数据更新自己的 state。
+
+<img src="./imgs/redux.png">
+
+Example:
+
+- Redux Logger 每次传递之前 console.log(action)
+- 实现 Ajax 异步请求（return 的不一定是对象，可能是一个函数）
+
+  - Redux Saga 单独把异步操作拆分到一个文件中执行。
+  - Redux-thunk 把异步操作放到 action 中。
+  - React-redux
