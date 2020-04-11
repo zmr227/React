@@ -243,3 +243,11 @@ Example:
   - Redux Saga 单独把异步操作拆分到一个文件中执行。
   - Redux-thunk 把异步操作放到 action 中。
   - React-redux
+
+## Chapter 4. 实战
+
+样式管理：
+
+1. import css file：CSS 文件一旦在一个文件中引入，全局生效，容易产生冲突。
+2. yarn add styled-components: 使组件的样式只对自己生效，也可以通过 injectGlobal 注入全局样式。
+3. reset.css: 为了统一网页在所有浏览器上的显示效果，通常都要引入
