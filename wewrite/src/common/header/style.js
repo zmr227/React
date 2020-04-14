@@ -64,6 +64,16 @@ export const NavSearch = styled.input.attrs({
   &::placeholder {
     color: #777;
   }
+  &.focused {
+    width: 220px;
+  }
+  &.slide-enter {
+    transition: all 0.2s ease-out;
+  }
+
+  &.slide-exit {
+    transition: all 0.2s ease-out;
+  }
 `;
 
 export const Addition = styled.div`
@@ -97,18 +107,17 @@ export const SearchWrapper = styled.div`
   position: relative;
   float: left;
   .searchIcon {
-    background: #777;
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    // width: 30px;
-    // height: 30px;
+    bottom: 1px;
+    right: 2px;
+    padding: 6px;
     text-align: center;
+    border-radius: 19px;
+    color: #999;
 
-    // color: #999;
-    // &.focused {
-    //   background: #777;
-    //   color: #fff;
-    // }
+    &.focused {
+      background: #999;
+      color: #fff;
+    }
   }
 `;
