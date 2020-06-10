@@ -41,7 +41,7 @@ class NewTodoList extends Component {
     //   store.dispatch(action);
     // });
     // // Middleware
-    const action = initTodoList();
+    const action = initTodoLists();
     store.dispatch(action); // action func will be auto executed
   }
 

@@ -251,3 +251,15 @@ Example:
 1. import css file：CSS 文件一旦在一个文件中引入，全局生效，容易产生冲突。
 2. yarn add styled-components: 使组件的样式只对自己生效，也可以通过 injectGlobal 注入全局样式。
 3. reset.css: 为了统一网页在所有浏览器上的显示效果，通常都要引入
+
+react-redux
+
+- Provider: 核心组件，<Provider store={store}>标签包裹的所有组件都能够使用 store 中的数据。
+- connect: 帮组件和 store 建立链接.
+  - 要修改 store 中的数据：创建 action -> 给到 store，调用 dispatch -> action 和 state 给到 reducer，返回新的 state 给 store -> 数据更新，页面重新渲染
+  - mapDispatchToProps：组件要修改 store 内容需要调用 dispatch，将要调用 dispatch 的方法都写在 mapDispatchToProps 里，这些方法就都能调用 store.dispatch()了。
+  - mapStateToProps：将要修改的 state 变量集中放在这里。
+
+immutable.js
+
+- 将 state 变成 immutable 对象：fromJS
