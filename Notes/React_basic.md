@@ -1,14 +1,16 @@
 ## Chapter 1. Background
 
-React Fiber -- React 16 之后的版本
+### 1.1 React Basic
 
-React 开发环境：
+#### 1.1.1 React Fiber -- React 16 之后的版本
+
+#### 1.1.2 React 开发环境：
 
 1. 引入.js 文件（古老）
 2. 通过脚手架工具编码（Grunt，Gulp，Webpack）
 3. 使用官方提供的脚手架工具 --> Create-React-App
 
-工程目录文件：
+#### 1.1.3 工程目录文件：
 
 - 项目依赖，安装包，版本号等信息：package-lock.json, package.json, node-modules folder
 - public 文件夹：
@@ -19,41 +21,93 @@ React 开发环境：
   - App.test.js：自动化测试文件
   - registerServiceWorker：PWA
 
-JSX 语法：
+### 1.2 Code Basic
+
+#### 1.2.1 JSX 语法：
 
 - 允许在代码中直接使用 html 标签结构 & 用花括号{}写 JS 表达式（非语句）
   - 在 JSX 中使用 JS 表达式需要用花括号{}包裹起来。
   - 要用到 JSX 语法就必须引入 import React from 'react';
 - 在 JSX 中写注释的方法：{//Something } 或 { / \* To write comment in JSX \* /}
+- 语法糖 Synctactic Sugar，通过 Babel 编译成可运行的 js 代码。
 
-App 组件（Components）
+#### 1.2.2 纯函数
+
+- 纯函数：给定输入，就一定有固定的输出，且没有任何副作用 -> 未修改输入的内容。
+- 非纯函数：setTimeout，Date，Ajax 请求等操作都会导致输出不固定，修改 Input 则会产生副作用。
+
+  ```python
+  # 纯函数
+  function sum1(a, b):
+    return a + b
+
+  # 非纯函数
+  function sum2(a, b):
+    a = a + b
+    return a
+  ```
+
+### 1.3 Component Basic
+
+#### 1.3.1 组件属性 Component
 
 - 大写字母开头的元素叫组件，小写字母开头则是普通元素。
 - 创建实例/使用组件时，constructor()会自动优先执行。
-- 一个组件的 render()返回的内容必须有一个 wrapper 元素包裹，
+- render 方法里的 return 代表界面要输出什么。一个组件的 render()返回的内容必须有一个 wrapper 元素包裹，
   - 如<div><React.Fragment>
   - Fragment 是占位符，只用于包裹，不会被渲染成任何标签/元素。
+- 所有 React 组件必须像[纯函数](#1.2.2-纯函数)那样使用被传入的 props 值（不能修改 props 中的属性值），若要修改展示的数据，可以通过[state](#1.3.3-State)进行修改。
 
-State
-
-- React 的特性：immutable，即 state 中的数据不允许做修改。
-- state 负责存储组件中的数据，若要改变组件中 state 存储的数据，需要调用 setState() 对具体项进行赋值，不能直接修改 this.state.value。
-- 若要修改 list 等 state 中的数据时，应当将其拷贝一份，修改备份后将新的 list 通过 setState()函数赋值给原数组，否则在之后的性能优化中可能会有问题。
-
-事件绑定
-
-- function.bind(this)改变函数作用域。
-- onClick，onChange，className 驼峰名称
-
-ReactDOM
-
-- 加载一个组件，通过 render 把某个组件渲染到页面的指定 DOM 节点上
-
-组件 Component
+#### 1.3.2 组件结构 & 传值 Component Tree
 
 - 树形结构，拆分成父组件和若干子组件。
 - 父组件可以通过标签属性 attribute 的形式向子组件传递值/函数，
 - 子组件通过 this.props.xxx 来接收传值，调用父组件方法改变父组件的数据时，一定要在父组件传值时 bind(this)绑定 this 指向为父组件。
+
+#### 1.3.3 State
+
+- state 负责存储组件中的数据，若要改变组件中 state 存储的数据，需要调用 setState() 对具体项进行赋值，不能直接修改 this.state.value。
+- 组件**内部**的数据可以动态改变：
+  - 由于 React 的 immutable 特性，即 state 中的数据不允许直接做修改。
+  - 调用 this.setState()方法是更新 state 的唯一途径。
+- 若要修改 list 等 state 中的数据时，应当将其拷贝一份，修改备份后将新的 list 通过 setState()函数赋值给原数组，否则在之后的性能优化中可能会有问题。
+
+#### 1.3.4 事件绑定
+
+- ReactJS 类中的 this 没有自动绑定功能，需要通过 this.func = this.func.bind(this)来改变函数的作用域，实现函数的调用。
+- onClick，onChange，className 驼峰名称
+
+### 1.4 生命周期
+
+### 1.4.1 生命周期
+
+1. 组件初始化：
+   - 组件从创建开始到被 mount 到一个 DOM 节点上的过程。
+   - constructor -> render -> React update DOM and refs -> componentDidMount
+2. 组件更新：
+   - 有新的 props 传入/调用 setState()/forceUpdate()后，从开始到组件更新完成的过程。
+   - render -> React update DOM and refs -> componentDidUpdate
+3. 组件卸载：
+   - 组件从 DOM 节点上卸载的过程。
+   - componentWillUnmount
+
+### 1.4.2 生命周期函数
+
+- 在某一个时刻，组件会自动调用执行的函数（constructor，render 等）
+- 可用于性能优化 & 发送 AJAX 请求。
+- componentWillMount / componentDidMount 在组件被挂载到页面上之前/之后执行，只执行一次。
+- ajax 请求应当放在 componentDidMount 中，只执行一次且可避免冲突。（也可以放在 constructor，但推荐在 componentDidMount）
+- componentWillReceiveProps 执行时间：
+  - 当一个组件要从父组件中接受参数时
+  - 若该组件是第一次被加入到父组件中，不会执行
+  - 若该组件已经存在于父组件中，才会执行
+    <img src="imgs/生命周期函数.png">
+- 除了 render 之外所有的生命周期函数都可以不存在
+- render 函数执行条件：组件的 state 或 props 发生变化 / 父组件 render 函数执行时，子组件的 render 也会执行（性能损耗）=> 使用 shouldComponentUpdate(nextProps, nextState) 函数进行优化
+
+ReactDOM
+
+- 加载一个组件，通过 render 把某个组件渲染到页面的指定 DOM 节点上
 
 ## Chapter 2. Advanced React
 
@@ -156,20 +210,6 @@ Ref 的使用
   - `<input ref={(input) => { this.input = input; }} >`
   - `const value = this.input.value;`
 
-生命周期函数
-
-- 在某一个时刻，组件会自动调用执行的函数（constructor，render 等）
-- 可用于性能优化 & 发送 AJAX 请求。
-- componentWillMount / componentDidMount 在组件被挂载到页面上之前/之后执行，只执行一次。
-- ajax 请求应当放在 componentDidMount 中，只执行一次且可避免冲突。（也可以放在 constructor，但推荐在 componentDidMount）
-- componentWillReceiveProps 执行时间：
-  - 当一个组件要从父组件中接受参数时
-  - 若该组件是第一次被加入到父组件中，不会执行
-  - 若该组件已经存在于父组件中，才会执行
-    <img src="imgs/生命周期函数.png">
-- 除了 render 之外所有的生命周期函数都可以不存在
-- render 函数执行条件：组件的 state 或 props 发生变化 / 父组件 render 函数执行时，子组件的 render 也会执行（性能损耗）=> 使用 shouldComponentUpdate(nextProps, nextState) 函数进行优化
-
 Charles 接口数据模拟
 
 - 模拟后端 api 抓取 json 文件中的数据，通过 map local 返回。
@@ -199,9 +239,6 @@ Redux 概述
 - store 必须是唯一的
 - 只有 store 能改变自己的内容，因此 reducer 不能改变 state 数据（即 store 内容）。
 - Reducer 必须是纯函数
-  - 纯函数：给定输入，就一定有固定的输出，且没有任何副作用）
-  - 副作用：修改了输入的内容。
-  - 非纯函数：setTimeout，Date，Ajax 请求等操作都会导致输出不固定，修改 Input 则会产生副作用。
 
 Redux 工作流程
 
