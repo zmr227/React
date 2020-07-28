@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 class LikeButton extends Component {
   constructor(props) {
@@ -11,11 +11,15 @@ class LikeButton extends Component {
   }
   render() {
     return (
-      <React.Fragment>
-        <Button variant="primary" onClick={this.increaseLikes}>
-          Like {this.state.likes}
-        </Button>
-      </React.Fragment>
+      <Row>
+        <Col>
+          <Button variant="primary" onClick={this.increaseLikes}>
+            Like {this.state.likes}
+          </Button>
+        </Col>
+        <Col>test1</Col>
+        <Col>test2</Col>
+      </Row>
     );
   }
 
