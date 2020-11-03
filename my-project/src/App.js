@@ -4,7 +4,7 @@ import ThemeContext from "./ThemeContext";
 import Components from "./components";
 import { Button, Container } from "react-bootstrap";
 
-const tags = ["x", "dfs"];
+const tags = ["x", "y"];
 const themes = {
   light: {
     variant: "light",
