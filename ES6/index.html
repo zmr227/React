@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ES6</title>
+</head>
+
+<body>
+    <script>
+        // ES3: no const, only name var with Capital Letters as mark for developers
+        var CONST = 'es3';
+        CONST = '324';
+        console.log(CONST);
+
+        // ES5: set writable to false
+        Object.defineProperty(window, 'es5', {
+            value: 'es5',
+            writable: false
+        });
+        console.log(es5);
+        es5 = 'new-es5';
+        console.log(es5);
+
+        // ES6: const, must initialize when created
+        const es6 = 'es6';
+        console.log(es6);
+
+
+        // var vs let/const
+
+        /* let & const 
+            不允许重复声明，
+            不属于顶层对象window（避免污染window）
+            不存在变量提升，
+            暂时性死区（在代码块内，使用let命令声明变量之前，该变量都是不可用的，调用会报错）
+            块状作用域
+        */
+
+        /* let vs const
+            很多变量在定义赋值后都不会被改变
+            优先选用const，如果发现该变量确实需要改变时才改为let（不要用var）
+            能够使代码更加安全，很多bug是因为变量的重复赋值造成
+        */
+
+        // var 允许重复声明，后声明的覆盖前面的
+        var str = 'es6';
+        var str = 'es2015';
+        console.log(str);
+
+        // const 不允许重复声明（会报错）
+        const str1 = 'es6';
+        // const str1 = 'es2015';
+        // console.log(str1);
+
+        // var 定义的对象是属于顶层对象window的
+        // 当window里的变量越来越多 ==> 污染全局变量
+        console.log(window.str);
+
+        // const 生成的对象不属于顶层对象window
+        console.log(window.str1);
+
+        // var 允许变量提升
+        // 虽然在打印的时候未定义undefVar，但由于该变量在后续代码中被定义，因此变量的声明会被提前而返回undefined而不是报错
+        console.log(undefVar)
+        var undefVar = 'es6';
+
+        // 相当于
+        var undefVar;
+        console.log(undefVar);
+        var undefVar = 'es6';
+
+        // const 不允许变量提升
+        // 必须先定义再引用，代码更加安全
+        // console.log(undefConst);
+        // const undefConst = 'es6const';
+
+        // const生成的变量有块级作用域，即只在括号内
+        if (true) {
+            const cst = 'es6';
+            var va = 'es6';
+        }
+        // console.log(cst);
+        console.log(va);
+
+
+        // const 定义的变量不可变？ 
+        
+        // 当定义基本数据类型时：数值不可被改变；
+        // 当定义引用数据类型时：其中存储的值并非不可变，而是变量指向的地址不能被改变
+        /* 基本数据类型：value直接存在stack中
+            引用数据类型：真实数据存在heap中，在stack里只保存其reference地址
+        */
+        const esObj = {
+            name: 'es6',
+            year: 2020,
+            extension: ['es7', 'es8', 'es9']
+        }
+        esObj.name = 'es2015';
+
+        const esArr = [1,2,3];
+        esArr[2] = 2020;
+
+        console.log(esObj);
+        console.log(esArr);
+
+        // 若想将其obj/arr等引用类型的值也设置为不可变，则需要使用freeze
+        Object.freeze(esObj);
+        esObj.year=2021;
+        // freeze 无法冻结嵌套/深层次的引用对象，需要自行定义递归函数对每一层都进行freeze
+        esObj.extension[0] = 'es2016'; 
+        console.log(esObj);
+
+        // deep freeze
+        function myFreeze(obj) {
+            Object.freeze(obj);
+            Object.keys(obj).forEach(function(key) {
+                if (typeof obj[key] === 'object'){
+                    myFreeze(obj[key]);
+                }
+            });
+        }
+
+        myFreeze(esObj);
+        esObj.extension[2] = 'es2018';
+
+        console.log(esObj);
+
+    </script>
+</body>
+
+</html>

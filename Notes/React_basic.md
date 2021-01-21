@@ -1,3 +1,10 @@
+## Chapter 0. Why React?
+
+1. Virtual DOM
+2. Reusable/Clearer Web Components
+3. Maintained by Facebook & lots of opensource contributors, evolve for the forseeable future
+4. Hirable
+
 ## Chapter 1. Background
 
 ### 1.1 React Basic
@@ -57,6 +64,19 @@
   - 如<div><React.Fragment>
   - Fragment 是占位符，只用于包裹，不会被渲染成任何标签/元素。
 - 所有 React 组件必须像[纯函数](#1.2.2-纯函数)那样使用被传入的 props 值（不能修改 props 中的属性值），若要修改展示的数据，可以通过[state](#1.3.3-State)进行修改。
+
+  ```JSX
+  // ReactDOM.render(What to Render, Where to Render)
+  // first param must be wrapped as one element
+  import React from 'react';
+  import ReactDOM from 'react-dom';
+
+  const firstElem = <h1>Hello <p>World!</p></h1>
+
+  ReactDOM.render(
+    firstElem,
+    document.getElementById("root"));
+  ```
 
 #### 1.3.2 组件结构 & 传值 Component Tree
 
@@ -314,6 +334,20 @@ Example:
 1. import css file：CSS 文件一旦在一个文件中引入，全局生效，容易产生冲突。
 2. yarn add styled-components: 使组件的样式只对自己生效，也可以通过 injectGlobal 注入全局样式。
 3. reset.css: 为了统一网页在所有浏览器上的显示效果，通常都要引入
+4. className instead of class: Deep down JSX is using javaScript DOM API
+
+```JS
+<header className="new_class_name">Title</header>
+// equals
+document.getElementById("something").className += " new_class_name"
+```
+
+5. inline styling
+
+```JSX
+//  JSX => JavaScript: wrap in {}, style need to be an object
+<div style={{color: "FFFFFF"}}>hello</div>
+```
 
 react-redux
 
