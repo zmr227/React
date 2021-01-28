@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function</title>
+</head>
+<body>
+    <button id="btn">TestBtn</button>
+    <script>
+        // 传统JS函数写法
+        function sum1(x, y) {
+            return x + y;
+        }
+        const res1 = sum1(2, 3);
+        console.log(res1);
+
+        const sum2 = function(x, y){
+            return x + y;
+        }
+        console.log(sum2(3, 4));
+
+        // 箭头函数：箭头左边是参数，右边是方法体
+        const sum3 = (x, y) => {
+            return x + y;
+        }
+        console.log(sum3(4, 5));
+
+        // 更简单的写法，如果只有一行代码可以不需要大括号，如果只有一个参数可以不用小括号
+        const sum4 = (x, y) => x + y;
+        const sum5 = x => x + 1;
+        console.log(sum4(5, 6));
+        console.log(sum5(6, 7));
+
+        // 传统函数利用 this 修改 DOM Object 的属性
+        const testBtn = document.querySelector('#btn');
+        testBtn.addEventListener('click', function(){
+            // this 是对当前对象的引用，代指当前的object也就是testBtn
+            console.log(this);
+            this.style.backgroundColor = '#f00';
+        });
+
+
+
+        // 在箭头函数中，没有this的概念，如果使用this会沿着当前作用域链，向上寻找外围作用域
+        // 箭头函数是在全局上下文中被定义的，所以this === window。所以当this是由目标对象动态决定时，我们应该使用函数表达式
+
+        /* 箭头函数不适用的场景：
+            1. 动态上下文中的回调函数（要用 this 动态绑定对象）
+            2. 对象中的函数（要用到 this，理由同上）
+            3. 要调用 arguments 的时候
+            4. 构造函数不能使用箭头函数
+            https://www.jianshu.com/p/e45fdbed522b
+        */
+
+        // testBtn.addEventListener('click', () => {
+        //     // 此时的 this 指向顶层对象 window
+        //     console.log(this);
+        //     // 此处会报错：因为 window.style 是 undefined，没有 backgroundColor 属性
+        //     this.style.backgroundColor = '#0f0';
+        // });
+
+        // ES6 中针对对象中的函数，有一种特殊的简写方法
+        const obj = {
+            name: 'minrui',
+            // 此处不能用箭头函数，理由同上，即 this 的指向问题
+            // 但此处不会报错，因为 window 中也有一个 name 属性默认值为 “”
+            showName(){
+                console.log('My name is ' + this.name);
+            }
+        };
+        obj.showName();
+
+        function mySum1(x, y) {
+            console.log(arguments);
+            return x + y;
+        };
+
+        mySum1(2, 3);
+
+        // const mySum2 = (x, y) => {
+        //     // 会报错：argument not defined
+        //     console.log(arguments);
+        //     return x + y;
+        // };
+
+        // mySum2(3, 4);
+
+
+        // Class 的构造函数
+        function Course(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        // 不能使用箭头函数作为构造函数
+        // const Course1 = (name, price) => {
+        //     this.name = name;
+        //     this.price = price;
+        // }
+
+        const c1 = new Course('es6', 200);
+        console.log(c1);
+
+    </script>
+</body>
+</html>
